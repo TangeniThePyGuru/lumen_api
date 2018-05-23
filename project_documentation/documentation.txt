@@ -5,3 +5,5 @@
     - vagrant box add laravel/homestead
     - if you are asked to login and you don't have an account go to https://www.vagrantcloud.com
       and create your account
+- go to bootstrap
+    - uncomment eloquent

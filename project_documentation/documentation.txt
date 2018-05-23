@@ -1,2 +1,7 @@
 - Create a Homestead.yml file in the root folder
-php vendor/laravel/homestead/homestead make
+    - php vendor/laravel/homestead/homestead make
+
+- Add your virtual machine provider
+    - vagrant box add laravel/homestead
+    - if you are asked to login and you don't have an account go to https://www.vagrantcloud.com
+      and create your account

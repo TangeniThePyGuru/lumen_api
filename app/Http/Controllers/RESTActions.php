@@ -17,7 +17,7 @@ trait RESTActions {
         $m = self::MODEL;
         $model = $m::find($id);
         if(is_null($model)){
-            return $this->respond(Response::HTTP_NOT_FOUND);
+            return $this->createErrorMessage(Response::HTTP_NOT_FOUND);
         }
         return $this->respond(Response::HTTP_OK, $model);
     }
@@ -35,7 +35,7 @@ trait RESTActions {
         $this->validate($request, $m::$rules);
         $model = $m::find($id);
         if(is_null($model)){
-            return $this->respond(Response::HTTP_NOT_FOUND);
+            return $this->createErrorMessage(Response::HTTP_NOT_FOUND);
         }
         $model->update($request->all());
         return $this->respond(Response::HTTP_OK, $model);
@@ -45,7 +45,7 @@ trait RESTActions {
     {
         $m = self::MODEL;
         if(is_null($m::find($id))){
-            return $this->respond(Response::HTTP_NOT_FOUND);
+            return $this->createErrorMessage(Response::HTTP_NOT_FOUND);
         }
         $m::destroy($id);
         return $this->respond(Response::HTTP_NO_CONTENT);
@@ -55,5 +55,9 @@ trait RESTActions {
     {
         return response()->json($data, $status);
     }
+
+	public function createErrorMessage($code){
+		return response()->json(['message' => 'Resource does not exist', 'code' => $code ]);
+	}
 
 }

@@ -32,11 +32,11 @@ trait RESTActions {
     public function put(Request $request, $id)
     {
         $m = self::MODEL;
-        $this->validate($request, $m::$rules);
         $model = $m::find($id);
         if(is_null($model)){
-            return $this->createErrorMessage(Response::HTTP_NOT_FOUND);
+            return $this->createErrorMessage(Response::HTTP_NOT_FOUND,'Resource with id '.$id. ' not found.');
         }
+		$this->validate($request, $m::$rules);
         $model->update($request->all());
         return $this->respond(Response::HTTP_OK, $model);
     }

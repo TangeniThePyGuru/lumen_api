@@ -51,15 +51,33 @@ trait RESTActions {
         return $this->respond(Response::HTTP_NO_CONTENT);
     }
 
+	/**
+	 * respond with data
+	 * @param $status
+	 * @param array $data
+	 * @return mixed
+	 */
     protected function respond($status, $data = [])
     {
         return response()->json(['data' => $data], $status);
     }
 
+	/**
+	 * respond with error messages
+	 * @param $code
+	 * @param null $message
+	 * @return mixed
+	 */
 	public function createErrorMessage($code, $message = null){
 		return response()->json(['message' => ($message) ? $message : 'Resource does not exist', 'code' => $code ], $code);
 	}
 
+	/**
+	 * respond with validation error messages
+	 * @param Request $request
+	 * @param array $errors
+	 * @return mixed
+	 */
 	protected function buildFailedValidationResponse(Request $request, array $errors)
 	{
 		return $this->createErrorMessage( 422, $errors);

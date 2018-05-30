@@ -53,11 +53,15 @@ trait RESTActions {
 
     protected function respond($status, $data = [])
     {
-        return response()->json($data, $status);
+        return response()->json(['data' => $data], $status);
     }
 
-	public function createErrorMessage($code){
-		return response()->json(['message' => 'Resource does not exist', 'code' => $code ], $code);
+	public function createErrorMessage($code, $message = null){
+		return response()->json(['message' => ($message) ? $message : 'Resource does not exist', 'code' => $code ], $code);
 	}
 
+	protected function buildFailedValidationResponse(Request $request, array $errors)
+	{
+		return $this->createErrorMessage( 422, $errors);
+	}
 }

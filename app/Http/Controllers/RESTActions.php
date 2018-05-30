@@ -57,7 +57,7 @@ trait RESTActions {
     }
 
 	public function createErrorMessage($code){
-		return response()->json(['message' => 'Resource does not exist', 'code' => $code ]);
+		return response()->json(['message' => 'Resource does not exist', 'code' => $code ], $code);
 	}
 
 }

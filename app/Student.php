@@ -31,6 +31,6 @@ class Student extends Model
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
 	 */
 	public function courses(){
-		return $this->belongsTo(Course::class);
+		return $this->belongsToMany(Course::class);
 	}
 }

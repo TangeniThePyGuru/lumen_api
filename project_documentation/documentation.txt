@@ -7,3 +7,6 @@
       and create your account
 - go to bootstrap
     - uncomment eloquent
+
+- Vagrant plugins
+    - vagrant plugin install vagrant-hostsupdater

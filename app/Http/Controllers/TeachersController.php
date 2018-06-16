@@ -24,7 +24,7 @@ class TeachersController extends Controller {
         $courses = $model->courses;
         if (sizeof($courses) > 0){
 //            409 represents a conflict request
-            return $this->createErrorMessage(409,'You can\'t remove a teacher with active subscriptions. Please remove those courses first');
+            return $this->createErrorMessage(Response::HTTP_CONFLICT,'You can\'t remove a teacher with active subscriptions. Please remove those courses first');
         }else{
 
             $model->destroy($id);

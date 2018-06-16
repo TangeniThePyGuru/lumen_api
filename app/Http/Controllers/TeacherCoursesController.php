@@ -7,34 +7,51 @@ use Illuminate\Http\Request;
 
 class TeacherCoursesController extends Controller {
 
-//    const MODEL = "App\Course";
+    const COURSE_MODEL = "App\Course";
 
-//    use RESTActions;
+    use RESTActions;
+
 
 	public function all($teacher)
 	{
 		$teacher = Teacher::find($teacher);
-		return $this->respond(Response::HTTP_OK, $teacher->courses);
+
+		if ($teacher){
+            return $this->respond(Response::HTTP_OK, $teacher->courses);
+        }
+
+        return $this->createErrorMessage(Response::HTTP_NOT_FOUND, "Teacher with given id does not exist");
 	}
 
-	public function get($teacher, $course)
-	{
-//		$m = self::MODEL;
-		$teacher = Teacher::find($teacher);
-		$course = $teacher->courses()->find($course);
-		if(is_null($course)){
-			return $this->respond(Response::HTTP_NOT_FOUND);
-		}
-		return $this->respond(Response::HTTP_OK, $course);
-	}
-
-//	public function add(Teacher $teacher, Request $request)
+//	public function get($teacher, $course)
 //	{
 ////		$m = self::MODEL;
-////		$m::create($request->all())
-////		$this->validate($request, Course::$rules);
-//		return $this->respond(Response::HTTP_CREATED, $teacher->courses()->attach(Course::create($request->all())));
+//		$teacher = Teacher::find($teacher);
+//		$course = $teacher->courses()->find($course);
+//		if(is_null($course)){
+//			return $this->respond(Response::HTTP_NOT_FOUND);
+//		}
+//		return $this->respond(Response::HTTP_OK, $course);
 //	}
+
+	public function add($teacher, Request $request)
+	{
+	    $teacher = Teacher::find($teacher);
+
+	    if ($teacher){
+            $m = self::COURSE_MODEL;
+            $this->validate($request, $m::$rules);
+//            dd($request->all());
+            $course = $m::create(array_merge(
+                $request->all(),
+                ["teacher_id" => $teacher->id]
+            ));
+
+            return $this->respond(Response::HTTP_OK, "The course with id {$course->id} has been created and associated with teacher with id {$teacher->id}");
+
+        }
+        return $this->createErrorMessage(Response::HTTP_NOT_FOUND, "Teacher with given id does not exist");
+	}
 
 //	public function put(Request $request, $teacher, $course)
 //	{
@@ -58,9 +75,9 @@ class TeacherCoursesController extends Controller {
 //		return $this->respond(Response::HTTP_NO_CONTENT);
 //	}
 
-	protected function respond($status, $data = [])
-	{
-		return response()->json($data, $status);
-	}
+//	protected function respond($status, $data = [])
+//	{
+//		return response()->json($data, $status);
+//	}
 
 }

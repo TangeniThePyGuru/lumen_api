@@ -53,6 +53,6 @@ $router->delete('teachers/{teacher}/courses/{course}', 'TeacherCoursesController
  */
 $router->get('courses/{course}/students', 'CourseStudentsController@all');
 $router->get('courses/{course}/students/{student}', 'CourseStudentsController@get');
-$router->post('courses/{course}/students', 'CourseStudentsController@add');
+$router->post('courses/{course}/students/{student}', 'CourseStudentsController@add');
 $router->put('courses/{course}/students/{student}', 'CourseStudentsController@put');
 $router->delete('courses/{course}/students/{student}', 'CourseStudentsController@remove');

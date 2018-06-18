@@ -71,14 +71,30 @@ class CourseStudentsController extends Controller {
 //		return $this->respond(Response::HTTP_OK, $model);
 //	}
 
-//	public function remove($id)
-//	{
-//		$m = self::MODEL;
-//		if(is_null($m::find($id))){
-//			return $this->respond(Response::HTTP_NOT_FOUND);
-//		}
-//		$m::destroy($id);
-//		return $this->respond(Response::HTTP_NO_CONTENT);
-//	}
+	public function remove($course, $student)
+	{
+
+//	    check if course exist
+        $course = Course::find($course);
+
+        if ($course){
+//            check if student exist
+            $student = Student::find($student);
+
+            if ($student){
+//                 check if this student exists in the course
+                if ($course->students()->find($student->id)){
+//                remove student from course
+                    $course->students()->detach($student->id);
+                    return $this->createErrorMessage(Response::HTTP_CONFLICT, "Student with id {$student->id} successfully removed from the course with id {$course->id}");
+                }
+
+                return $this->respond(Response::HTTP_CREATED, "Student with id {$student->id} does not exist in the course with id {$course->id}");
+            }
+            return $this->createErrorMessage(Response::HTTP_NOT_FOUND, "Student with given id does not exist");
+
+        }
+        return $this->createErrorMessage(Response::HTTP_NOT_FOUND, "Course with given id does not exist");
+	}
 
 }

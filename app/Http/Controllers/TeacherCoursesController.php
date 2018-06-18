@@ -53,17 +53,26 @@ class TeacherCoursesController extends Controller {
         return $this->createErrorMessage(Response::HTTP_NOT_FOUND, "Teacher with given id does not exist");
 	}
 
-//	public function put(Request $request, $teacher, $course)
-//	{
-////		$m = self::MODEL;
-//		$this->validate($request, []);
-//		$teacher = Teacher::find($teacher);
-//		if(is_null($model)){
-//			return $this->respond(Response::HTTP_NOT_FOUND);
-//		}
-//		$model->update($request->all());
-//		return $this->respond(Response::HTTP_OK, $model);
-//	}
+	public function put(Request $request, $teacher, $course)
+	{
+		$course_model = self::COURSE_MODEL;
+		$teacher = Teacher::find($teacher);
+		if($teacher){
+		    $course = Course::find($course);
+		    if ($course){
+		        $this->validate($request, $course_model::$rules);
+
+		        $course->title = $request->title;
+                $course->description = $request->description;
+                $course->value = $request->value;
+
+		        $course->save();
+                return $this->respond(Response::HTTP_OK, "Course with id {$course->id} successfully updated");
+            }
+			return $this->createErrorMessage(Response::HTTP_NOT_FOUND, "Course with given id does not exist");
+		}
+		return $this->createErrorMessage(Response::HTTP_NOT_FOUND, "Teacher with given id does not exist");
+	}
 
 //	public function remove($id)
 //	{
@@ -73,11 +82,6 @@ class TeacherCoursesController extends Controller {
 //		}
 //		$m::destroy($id);
 //		return $this->respond(Response::HTTP_NO_CONTENT);
-//	}
-
-//	protected function respond($status, $data = [])
-//	{
-//		return response()->json($data, $status);
 //	}
 
 }

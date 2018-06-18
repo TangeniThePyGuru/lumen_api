@@ -74,14 +74,27 @@ class TeacherCoursesController extends Controller {
 		return $this->createErrorMessage(Response::HTTP_NOT_FOUND, "Teacher with given id does not exist");
 	}
 
-//	public function remove($id)
-//	{
-//		$m = self::MODEL;
-//		if(is_null($m::find($id))){
-//			return $this->respond(Response::HTTP_NOT_FOUND);
-//		}
-//		$m::destroy($id);
-//		return $this->respond(Response::HTTP_NO_CONTENT);
-//	}
+	public function remove($teacher, $course)
+	{
+        $teacher = Teacher::find($teacher);
+        if($teacher){
+            $course = Course::find($course);
+            if ($course){
+//                 check if this course is associated with this teacher
+                if ($teacher->courses()->find($course->id)){
+
+                    $course->students()->detach();
+
+                    $course->delete();
+
+                    return $this->respond(Response::HTTP_OK, "Course with id {$course->id} successfully deleted");
+                }
+
+                return $this->createErrorMessage(Response::HTTP_CONFLICT, "Course with id {$course->id} is not associated with teacher with id {$teacher->id}");
+            }
+            return $this->createErrorMessage(Response::HTTP_NOT_FOUND, "Course with given id does not exist");
+        }
+        return $this->createErrorMessage(Response::HTTP_NOT_FOUND, "Teacher with given id does not exist");
+	}
 
 }
